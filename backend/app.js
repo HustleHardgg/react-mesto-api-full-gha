@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
@@ -7,11 +8,13 @@ const { PORT = 3000, BASE_PATH = 'localhost' } = process.env;
 // Защита сервера
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 // Импорт основных роутов
 const mainRouter = require('./routes/index');
 
 const app = express();
+app.use(cors());
 
 // Для защиты от множества автоматических запросов
 // https://www.npmjs.com/package/express-rate-limit
@@ -32,6 +35,15 @@ app.use(express.json());
 app.use(limiter);
 app.use(helmet());
 
+// Логгер
+app.use(requestLogger);
+// Краш-тест
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
 // Основные рабочие роуты
 app.use(mainRouter);
 
@@ -42,5 +54,5 @@ app.use(responseHandler);
 // Служебная информация: адрес запущенного сервера
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
-  console.log(`Адрес сервера — http://${BASE_PATH}:${PORT}`);
+  console.log('Сервер успешно запущен');
 });
