@@ -4,11 +4,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 
-const { PORT = 3000, BASE_PATH = 'localhost' } = process.env;
+const { PORT = 3000 } = process.env;
+const cors = require('cors');
 
 // Защита сервера
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 // Импорт основных роутов
@@ -47,6 +49,7 @@ app.get('/crash-test', () => {
 
 // Основные рабочие роуты
 app.use(mainRouter);
+app.use(errorLogger);
 
 // Обработчик ответов
 app.use(errors());
