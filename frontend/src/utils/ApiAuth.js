@@ -1,6 +1,6 @@
 class AuthApi {
-  constructor(authUrl) {
-    this._authUrl = authUrl;
+  constructor(apiAddress) {
+    this._authUrl = apiAddress;
   }
   // Метод обработки ответа сервера
   _processingServerResponse (res) {
@@ -16,7 +16,7 @@ class AuthApi {
       // По умолчанию fetch — это GET, можно не указывать
       headers: {
         "Content-Type": "application/json",
-        "Authorization" : `Bearer ${token}`
+        authorization : `Bearer ${ token }`
       }
     })
       .then(this._processingServerResponse)
@@ -31,6 +31,9 @@ class AuthApi {
       body: JSON.stringify({ password, email })
     })
       .then(this._processingServerResponse)
+      .then((userData) => {
+        if (userData.token) { localStorage.setItem('token', userData.token) }
+      })
   }
   // Метод регистрации пользователя
   userRegistration (password, email) {
@@ -46,6 +49,6 @@ class AuthApi {
 }
 
 // Создание экземпляра класса
-const apiAuth = new AuthApi('https://auth.nomoreparties.co/');
+const apiAuth = new AuthApi('https://mesto-back-kharitonov.nomoredomains.work/');
 // Экспорт экземпляра класса
 export default apiAuth;

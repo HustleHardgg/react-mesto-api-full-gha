@@ -9,7 +9,7 @@
 
 ## Ссылки на проект
 
-IP-адрес 51.250.6.137
+IP-адрес 84.201.129.228
 
 Frontend https://mesto-front-kharitonov.nomoreparties.sbs
 

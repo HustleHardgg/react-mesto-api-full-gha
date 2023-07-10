@@ -1,90 +1,99 @@
-import ApiFind from './ApiFind';
-
 class Api {
-    constructor({ link, headers }) {
-      this._link = link;
-      this._headers = headers;
-      
-    }
-    // Метод обработки ответа сервера
-    _processingServerResponse(res) {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject(`код ошибки: ${res.status}`);
-      }
-    }
-    // Метод инициализации карточек с сервера
-    getInitialCards() {
-      return fetch(`${this._link}cards`, {
-        headers: this._headers,
-        // По умолчанию fetch — это GET, можно не указывать
-      })
-        .then(res => { return this._processingServerResponse(res); })
-    }
-    // Метод добавления новой карточки на сервер
-    // Метод добавления новой карточки на сервер
-  addNewCard (name, link) {
-    return fetch(`${this._link}cards`, {
-      headers: this._headers,
-      method: 'POST',
-      body: JSON.stringify({ name, link })
-    })
-      .then(res => { return this._processingServerResponse(res); })
+  constructor(apiAddress) {
+    this._link = apiAddress;
   }
-    // Метод удаления карточки с сервера
-    deleteCard(cardId) {
-      return fetch(`${this._link}cards/${cardId}`, {
-        headers: this._headers,
-        method: 'DELETE',
-      })
-        .then(res => { return this._processingServerResponse(res); })
-    }
-    // Метод получения данных пользователя с сервера
-    getUserData() {
-      return fetch(`${this._link}users/me`, {
-        headers: this._headers
-        
-      })
-        .then(res => { return this._processingServerResponse(res); })
-    }
-    // Метод отправки данных пользователя на сервер
-    sendUserData(userName, userAbout) {
-      return fetch(`${this._link}users/me`, {
-        headers: this._headers,
-        method: 'PATCH',
-        body: JSON.stringify({ name: userName, about: userAbout})
-        
-      })
-        .then(res => { return this._processingServerResponse(res); })
-    }
-    // Метод отправки данных о новом аватаре на сервер
-    sendAvatarData(avatarLink) {
-      return fetch(`${this._link}users/me/avatar`, {
-        headers: this._headers,
-        method: 'PATCH',
-        body: JSON.stringify({ avatar: avatarLink.avatar })
-      })
-        .then(res => { return this._processingServerResponse(res); })
-    }
-    // Метод обработки лайков карточки
-  changeLikeCardStatus (cardId, isLiked) {
-    if (isLiked) {
-      return fetch(`${this._link}cards/${cardId}/likes`, {
-        headers: this._headers,
-        method: 'PUT',
-      })
-      .then(res => { return this._processingServerResponse(res); })
+  // Метод обработки ответа сервера
+  _processingServerResponse (res) {
+    if (res.ok) {
+      return res.json();
     } else {
-      return fetch(`${this._link}cards/${cardId}/likes`, {
-        headers: this._headers,
-        method: 'DELETE',
-      })
-      .then(res => { return this._processingServerResponse(res); })
+      return Promise.reject(`код ошибки: ${res.status}`);
     }
+  }
+  // Метод инициализации карточек с сервера
+  getInitialCards() {
+    return fetch(`${this._link}cards`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('token') }`,
+      },
+    })
+    .then(this._processingServerResponse)
+  }
+  // Метод добавления новой карточки на сервер
+  addNewCard(name, link) {
+    return fetch(`${this._link}cards`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('token') }`,
+      },
+      body: JSON.stringify({ name, link }),
+    })
+    .then(this._processingServerResponse)
+  }
+  // Метод удаления карточки с сервера
+  deleteCard(cardId) {
+    return fetch(`${this._link}cards/${cardId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('token') }`,
+      },
+    })
+    .then(this._processingServerResponse)
+  }
+  // Метод получения данных пользователя с сервера
+  getUserData() {
+    return fetch(`${this._link}users/me`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('token') }`,
+      },
+    })
+    .then(this._processingServerResponse)
+  }
+  // Метод отправки данных пользователя на сервер
+  sendUserData(userName, userAbout) {
+    return fetch(`${this._link}users/me`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('token') }`,
+      },
+      body: JSON.stringify({ name: userName, about: userAbout }),
+    })
+    .then(this._processingServerResponse)
+  }
+  // Метод отправки данных о новом аватаре на сервер
+  sendAvatarData(avatarLink) {
+    return fetch(`${this._link}users/me/avatar`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('token') }`,
+      },
+      body: JSON.stringify({ avatar: avatarLink.avatar })
+    })
+    .then(this._processingServerResponse)
+  }
+  // Метод обработки лайков карточки
+  changeLikeCardStatus(cardId, isLiked) {
+    const methodUsed = isLiked ? 'PUT' : 'DELETE';
+    return fetch(`${this._link}cards/${cardId}/likes`, {
+      method: methodUsed,
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('token') }`,
+      },
+    })
+    .then(this._processingServerResponse)
   }
 }
 
-  const apiConnect = new Api(ApiFind);
-  // Экспорт класса
-  export default apiConnect;
+// Создание экземпляра класса
+const apiConnect = new Api('https://mesto-back-kharitonov.nomoredomains.work/');
+// Экспорт экземпляра класса
+export default apiConnect;
