@@ -8,8 +8,8 @@
 
 ## Ссылки на проект
 
-IP 51.250.104.254
+IP 84.201.129.228
 
-Frontend https://phomdev-mesto.nomoredomains.work/
+Frontend https://mesto-front-kharitonov.nomoreparties.sbs/
 
-Backend https://api.phomdev-mesto.nomoredomains.work/
+Backend https://mesto-back-kharitonov.nomoredomains.work/
