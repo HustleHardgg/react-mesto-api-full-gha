@@ -5,13 +5,12 @@ const { celebrate, Joi } = require('celebrate');
 const regular = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/;
 
 // Начало валидации данных пользователя
-
 // Валидация авторизации
 const validateUserAuth = celebrate({
   body: Joi.object().keys({
     email: Joi.string().min(4).max(50).email()
       .required(),
-    password: Joi.string().min(5)
+    password: Joi.string()
       .required(),
   }),
 });
@@ -24,7 +23,7 @@ const validateUserRegister = celebrate({
     avatar: Joi.string().pattern(regular),
     email: Joi.string().min(4).max(50).email()
       .required(),
-    password: Joi.string().min(5)
+    password: Joi.string()
       .required(),
   }),
 });
@@ -40,23 +39,19 @@ const validateUserId = celebrate({
 // Валидация данных обновления пользователя
 const validateUserUpdate = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30)
-      .required(),
-    about: Joi.string().min(2).max(30)
-      .required(),
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
   }),
 });
 
 // Валидация данных обновления аватара пользователя
 const validateUserAvatar = celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().pattern(regular)
-      .required(),
+    avatar: Joi.string().min(4).pattern(regular),
   }),
 });
 
 // Начало валидации данных карточек
-
 // Валидация данных создания карточки
 const validateCreateCard = celebrate({
   body: Joi.object().keys({

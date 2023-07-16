@@ -4,13 +4,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3001, BASE_PATH = 'localhost' } = process.env;
 const cors = require('cors');
 
 // Защита сервера
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
-
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 // Импорт основных роутов
@@ -46,11 +45,9 @@ app.get('/crash-test', () => {
     throw new Error('Сервер сейчас упадёт');
   }, 0);
 });
-
 // Основные рабочие роуты
 app.use(mainRouter);
 app.use(errorLogger);
-
 // Обработчик ответов
 app.use(errors());
 app.use(responseHandler);
@@ -58,5 +55,5 @@ app.use(responseHandler);
 // Служебная информация: адрес запущенного сервера
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
-  console.log('Сервер успешно запущен');
+  console.log(`Адрес сервера — http://${BASE_PATH}:${PORT}`);
 });

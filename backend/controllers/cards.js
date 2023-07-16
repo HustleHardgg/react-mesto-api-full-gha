@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 const mongoose = require('mongoose');
 
 const { ValidationError, CastError } = mongoose.Error;
@@ -15,8 +14,7 @@ const Forbidden = require('../utils/response-errors/Forbidden'); // 403
 // Получение списка карточек
 const getCardList = (req, res, next) => {
   Card.find({})
-    .populate(['owner', 'likes'])
-    .then((cardList) => res.send({ data: cardList }))
+    .then((cardList) => res.send(cardList))
     .catch((error) => next(error));
 };
 
@@ -24,7 +22,7 @@ const getCardList = (req, res, next) => {
 const createCard = (req, res, next) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
-    .then((cardObject) => res.status(SUCCESS_CREATED).send({ data: cardObject }))
+    .then((cardObject) => res.status(SUCCESS_CREATED).send(cardObject))
     .catch((error) => {
       // https://mongoosejs.com/docs/api/error.html#error_Error-ValidationError
       if (error instanceof ValidationError) {
@@ -62,7 +60,7 @@ const likeCard = (req, res, next) => {
   )
     .then((selectedCard) => {
       if (selectedCard) {
-        res.send({ data: selectedCard });
+        res.send(selectedCard);
       } else { next(new NotFound('Карточка по указанному _id не найдена')); }
     })
     .catch((error) => {
@@ -82,7 +80,7 @@ const removeLikeCard = (req, res, next) => {
   )
     .then((selectedCard) => {
       if (selectedCard) {
-        res.send({ data: selectedCard });
+        res.send(selectedCard);
       } else { next(new NotFound('Карточка по указанному _id не найдена')); }
     })
     .catch((error) => {

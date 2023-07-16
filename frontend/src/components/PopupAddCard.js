@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function PopupAddCard(props) {
+function PopupAddCard (props) {
   // Рефы названия и картинки карточки
   const cardName = useRef();
   const cardLink = useRef();
@@ -17,27 +17,24 @@ function PopupAddCard(props) {
   }
 
   return (
-    < PopupWithForm
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+    <PopupWithForm
+      isOpen = { props.isOpen }
+      onClose = { props.onClose }
       onSubmit= { handleSubmit }
-      id='cards-popup'
-      title='Новое место'
-      type='mesto'
-      buttonText='Создать' >
-
-      <h2 className="popup-addimage__header"></h2>
-
-      <input id="popup-addimage__place-name" type="text" /*name="placename"*/
-        className="popup-addimage__input popup-addimage__input_place" placeholder="Название" ref={ cardName } minLength="2"
-        maxLength="30" required></input>
-      <span className="popup-addimage__place-name-error"></span>
-
-      <input id="popup-addimage__place-link" type="url"
-        className="popup-addimage__input popup-addimage__input_place-link" placeholder="Ссылка на картинку" ref={ cardLink }
-              /*name="placeimage"*/ required></input>
-      <span className="popup-addimage__place-link-error"></span>
-
+      id = 'cards-popup'
+      title = 'Новое место'
+      type = 'mesto'
+      buttonText = 'Создать' >
+        <label htmlFor="place-name-input" className="popup__label">
+          <input id="place-name-input" type="text" className="popup__input"
+                 name="placename" required placeholder="Название" ref={ cardName } minLength="2" maxLength="30" />
+          <span className="place-name-input-error popup__input-error" />
+        </label>
+        <label htmlFor="place-image-input" className="popup__label">
+          <input id="place-image-input" type="url" className="popup__input"
+                 name="placeimage" required placeholder="Ссылка на картинку" ref={ cardLink } />
+          <span className="place-image-input-error popup__input-error" />
+        </label>
     </PopupWithForm>
   )
 }
