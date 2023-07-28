@@ -49,6 +49,6 @@ class AuthApi {
 }
 
 // Создание экземпляра класса
-const apiAuth = new AuthApi('http://mesto-back-kharitonov.nomoredomains.work/');
+const apiAuth = new AuthApi('https://mesto-back-kharitonov.nomoredomains.work/');
 // Экспорт экземпляра класса
 export default apiAuth;
