@@ -94,6 +94,6 @@ class Api {
 }
 
 // Создание экземпляра класса
-const apiConnect = new Api('http://mesto-back-kharitonov.nomoredomains.work/');
+const apiConnect = new Api('https://mesto-back-kharitonov.nomoredomains.work/');
 // Экспорт экземпляра класса
 export default apiConnect;
